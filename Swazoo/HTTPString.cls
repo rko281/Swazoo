@@ -16,22 +16,7 @@ This class contains some utility methods that were previously implemented as ext
 decodedHTTPFrom: aCharacterArray 
 	"Code taken from the swazoo specific extention to the CharacterArray class"
 
-	| targetStream sourceStream |
-	targetStream := WriteStream on: aCharacterArray class new.
-	sourceStream := ReadStream on: aCharacterArray.
-	[sourceStream atEnd] whileFalse: 
-			[| char |
-			char := sourceStream next.
-			char = $% 
-				ifTrue: 
-					[targetStream 
-						nextPut: (SpEnvironment integerFromString: '16r' , (sourceStream next: 2)) 
-								asCharacter]
-				ifFalse: 
-					[char == $+ 
-						ifTrue: [targetStream nextPut: Character space]
-						ifFalse: [targetStream nextPut: char]]].
-	^targetStream contents!
+	^aCharacterArray unescapePercents!
 
 encodedHTTPFrom: aCharacterArray 
 	"Code taken from the swazoo specific extention to the CharacterArray class"
